@@ -53,6 +53,8 @@ linearHypothesis(lm.3.2, myH0, vcov. = vcovHC(lm.3.2, "HC1"))
 probit.4.1 <- glm(smoker ~ smkban + female + age + age^2 + hsdrop + hsgrad + colsome + colgrad + black + hispanic, data = data, family = binomial(link = probit))
 summary(probit.4.1)
 
+# Find the working out of the probability of Mr.A smoking in my pdf file
+
 Mr.A <- list(smkban = 1, female = 0, age = 20, hsdrop = 1, hsgrad = 0, colsome = 0, colgrad = 0, black = 0, hispanic = 0)
 predict(probit.4.1, Mr.A, type = "response")
 
@@ -63,6 +65,10 @@ coeftest(probit.4.1, vcov.=vcovHC(probit.4.1, "HC1"))[2,]
 
 linearHypothesis(probit.4.1, myH0, vcov. = vcovHC(probit.4.1, "HC1"))
 # The null hypothesis that coefficients on education dummies are all zero is rejected at 5% significance, just like for lm.3.2
+
+
+
+# ----- Task 5 ----- 
 
 Mr.A_no_ban <- list(smkban = 0, female = 0, age = 20, hsdrop = 1, hsgrad = 0, colsome = 0, colgrad = 0, black = 0, hispanic = 0)
 Ms.B <- list(smkban = 1, female = 1, age = 40, hsdrop = 0, hsgrad = 0, colsome = 0, colgrad = 1, black = 1, hispanic = 0)
@@ -97,7 +103,9 @@ my_table <- tibble(rows = rows, probit_model, linear_probability_model) %>%
   mutate(probit_model = as.character(probit_model),
          linear_probability_model = as.character(linear_probability_model)) %>%
   replace_na(list(probit_model = '', linear_probability_model = '')) %>%
-  mutate(probit_model = case_when(rows == '(standard errors in parentheses)' ~  paste('(', probit_model, ')'), 
+  mutate(probit_model = case_when(rows == '(standard errors in parentheses)' ~  paste('(', probit_model, ')', sep=''), 
                                   .default = probit_model),
-         linear_probability_model = case_when(rows == '(standard errors in parentheses)' ~  paste('(', linear_probability_model, ')'),
+         linear_probability_model = case_when(rows == '(standard errors in parentheses)' ~  paste('(', linear_probability_model, ')', sep=''),
                                               .default = linear_probability_model))
+
+my_table
